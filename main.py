@@ -1,5 +1,6 @@
 import uvicorn ##ASGI
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pcos import PCOS
 import numpy as np
 import pickle
@@ -7,6 +8,19 @@ import pandas as pd
 from pydantic import BaseModel
 # 2. Create the app object
 app = FastAPI()
+origins = [
+    "http://localhost.tiangolo.com",
+    "https://localhost.tiangolo.com",
+    "http://localhost",
+    "http://localhost:8080",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 pickle_in = open("classifier.pkl","rb")
 classifier=pickle.load(pickle_in)
 # 3. Index route, opens automatically on http://127.0.0.1:8000
