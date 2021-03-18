@@ -6,34 +6,25 @@ import numpy as np
 import pickle
 import pandas as pd
 from pydantic import BaseModel
-# 2. Create the app object
 app = FastAPI()
-# origins = [
-#     "http://localhost.tiangolo.com",
-#     "https://localhost.tiangolo.com",
-#     "http://localhost",
-#     "http://localhost:8080",
-# ]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # to solve the CORS problem
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 pickle_in = open("classifier.pkl","rb")
 classifier=pickle.load(pickle_in)
-# 3. Index route, opens automatically on http://127.0.0.1:8000
 @app.get('/')
 def index():
     return {'message': 'Hello, World'}
 
-# 4. Route with a single parameter, returns the parameter within a message
-#    Located at: http://127.0.0.1:8000/AnyNameHere
+# get request
 @app.get('/Welcome')
 def get_name(name: str):
-    return {'Welcome To Krish Youtube Channel': f'{name}'}
-
+    return {'Welcome To the Project Femow': f'{name}'}
+ # post a json file to predict results.
 @app.post('/predict')
 def predict_pcos(data:PCOS):
     data = data.dict()
@@ -69,9 +60,9 @@ def predict_pcos(data:PCOS):
     }
 
 
-# 5. Run the API with uvicorn
-#    Will run on http://127.0.0.1:8000
 if __name__ == '__main__':
     uvicorn.run(app, host='127.0.0.1', port=8000)
+
+# to run the app locally use
 #uvicorn main:app --reload
 
